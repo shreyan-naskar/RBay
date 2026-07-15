@@ -1,0 +1,1 @@
+export const pageCacheKey = ( id: String ) => `pageCache#${id}`
