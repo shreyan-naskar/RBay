@@ -1,1 +1,4 @@
-export const pageCacheKey = ( id: String ) => `pageCache#${id}`
+export const pageCacheKey = ( id: string ) => `pageCache#${id}`
+export const usersKey = (userId: string)  => `users#${userId}`
+export const sessionsKey = (sessionId: string) => `session#${sessionId}`
+
