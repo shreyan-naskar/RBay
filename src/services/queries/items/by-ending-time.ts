@@ -1,12 +1,14 @@
-import { itemsByEndingAtKey } from "$services/keys";
+import { itemsByEndingAtKey, itemsKey } from "$services/keys";
 import { client } from "$services/redis";
+import { deserialize } from "./deserialize";
+
 
 export const itemsByEndingTime = async (
 	order: 'DESC' | 'ASC' = 'DESC',
 	offset = 0,
 	count = 10
 ) => {
-	const ids = await client.zRange(
+	const recentIds = await client.zRange(
 		itemsByEndingAtKey(),
 		Date.now(),
 		'+inf', 
@@ -17,6 +19,8 @@ export const itemsByEndingTime = async (
 				count
 			}
 		}
-
 	)
+	const recentItems = await Promise.all(recentIds.map(id => client.hGetAll(itemsKey(id))))
+
+	return recentItems.map( (item, i) => deserialize(recentIds[i], item))
 };
